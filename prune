@@ -1,0 +1,8 @@
+#!/bin/bash
+### Clear all cache memory on dev server
+echo "system df"
+docker system df
+
+echo "Pruning all cache memory"
+docker system prune
+

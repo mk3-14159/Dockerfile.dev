@@ -4,7 +4,7 @@ FROM ubuntu:latest
 # Install dependencies, Neovim, tmux, and git
 # This is a lot of dependencies, but I will have to make due on the dev image
 RUN apt-get update && \
-    apt-get install -y neovim tmux git curl wget zsh npm make unzip gcc && \
+    apt-get install -y neovim tmux git curl wget zsh npm make unzip gcc jq && \
         rm -rf /var/lib/apt/lists/*
 
 # Use environment variables to clone Neovim and tmux configurations
