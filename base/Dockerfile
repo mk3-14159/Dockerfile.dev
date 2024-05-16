@@ -18,6 +18,9 @@ RUN mv /root/.config/nvim/.zshrc /root/
 # Install Oh My Zsh and setup .zshrc
 RUN sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 
+# Install pnpm 
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+
 # Change the default shell to zsh for the root user
 SHELL ["/bin/zsh", "-c"]
 
