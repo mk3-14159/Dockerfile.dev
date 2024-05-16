@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Connecting to image [$1]"
+docker run -v ~/.ssh/id_ed25519:/root/.ssh/id_ed25519 -it $1 
