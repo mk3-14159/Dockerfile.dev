@@ -1,12 +1,26 @@
-# Use an official base image with enough tools, e.g., Ubuntu
-# Node Ubuntu
-FROM ubuntu:latest
+# Use an official base image with enough tools(something like node-bookworm) 
+
+FROM node:current-bookworm-slim
 
 # Install dependencies, Neovim, tmux, and git
 # This is a lot of dependencies, but I will have to make due on the dev image
 RUN apt-get update && \
-    apt-get install -y neovim tmux git curl wget zsh npm make unzip gcc jq openssl iputils bind-tools && \
+    apt-get install -y tmux git curl wget zsh npm cmake make unzip gcc jq openssl iputils-ping dnsutils ninja-build gettext pkg-config libtool autoconf g++ libtool-bin && \
         rm -rf /var/lib/apt/lists/*
+
+# Install Neovim, use stable release of 0.9
+RUN apt remove neovim -y
+RUN git clone https://github.com/neovim/neovim
+WORKDIR /neovim
+RUN git checkout remotes/origin/release-0.9
+RUN make CMAKE_BUILD_TYPE=RelWithDebInfo
+
+# Create a Debian package
+WORKDIR /neovim/build
+RUN cpack -G DEB
+
+# Install the Neovim package
+RUN dpkg -i --force-overwrite nvim-linux64.deb
 
 # Use environment variables to clone Neovim and tmux configurations
 # ENV NVIM_CONF_REPO="https://github.com/mk3-14159/dotfiles.git"
@@ -16,14 +30,15 @@ RUN git clone $NVIM_CONF_REPO /root/.config/nvim
 RUN mv /root/.config/nvim/.tmux.conf /root/
 RUN mv /root/.config/nvim/.zshrc /root/
 
+# Change the default shell to zsh for the root user
+SHELL ["/bin/zsh", "-c"]
+
 # Install Oh My Zsh and setup .zshrc
 RUN sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 
 # Install pnpm 
-curl -fsSL https://get.pnpm.io/install.sh | sh -
-
-# Change the default shell to zsh for the root user
-SHELL ["/bin/zsh", "-c"]
+#RUN curl -fsSL https://get.pnpm.io/install.sh | sh -
+RUN npm install -g pnpm
 
 # Set the working directory to the home directory
 WORKDIR /root

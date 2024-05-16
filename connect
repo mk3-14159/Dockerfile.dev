@@ -4,4 +4,4 @@ echo "Connecting to image [$1]"
 #docker run -v ~/.ssh/id_ed25519:/root/.ssh/id_ed25519 -it $1 
 
 ## For sveltekit expose
-docker run -p 5173:5173 -v ~/.ssh/id_ed25519:/root/.ssh/id_ed25519 -it $1
+docker run -p 3000:3000 -v ~/.ssh/id_ed25519:/root/.ssh/id_ed25519 -it $1
