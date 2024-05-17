@@ -8,14 +8,15 @@ RUN apt-get update && \
         rm -rf /var/lib/apt/lists/*
 
 # Install Neovim, use stable release of 0.9
-RUN apt remove neovim -y
-RUN git clone https://github.com/neovim/neovim
-WORKDIR /neovim
+#RUN apt remove neovim -y
+RUN git clone https://github.com/neovim/neovim.git /root/neovim
+WORKDIR /root/neovim
+RUN git fetch 
 RUN git checkout remotes/origin/release-0.9
 RUN make CMAKE_BUILD_TYPE=RelWithDebInfo
 
 # Create a Debian package
-WORKDIR /neovim/build
+WORKDIR /root/neovim/build
 RUN cpack -G DEB
 
 # Install the Neovim package
@@ -40,11 +41,6 @@ WORKDIR /root
 # Configure git with a default username and email
 RUN git config --global user.name "mk.dev"
 RUN git config --global user.email "mk@dev.com"
-
-# Configure ssh default key 
-COPY ~/.ssh/id_ed25519 /root/.ssh/id_ed25519
-RUN chmod 600 /root/.ssh/id_ed25519
-RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 # Set the default command to open tmux which then opens Neovim
 CMD ["zsh"]
