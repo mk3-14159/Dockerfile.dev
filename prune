@@ -6,3 +6,17 @@ docker system df
 echo "Pruning all cache memory"
 docker system prune
 
+# Prompt the user for confirmation
+read -p "Do you want to docker prune volumes? [y/N]" answer
+
+# Normalize the answer to lowercase
+answer=$(echo $answer | tr '[:upper:]' '[:lower:]')
+
+if [[ "$answer" == "y" ]]; then
+    echo "Pruning Volumes..."
+    docker volume prune -f
+else
+    echo "no prune :3."
+fi
+
+echo "DONE"
