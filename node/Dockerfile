@@ -39,7 +39,7 @@ RUN sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh
 # Install pnpm, typescript and ts-node  
 #RUN curl -fsSL https://get.pnpm.io/install.sh | sh -
 RUN npm install -g pnpm
-RUN pnpm install -g typescript ts-node
+RUN npm install -g typescript ts-node
 
 # Set the working directory to the home directory
 WORKDIR /root
